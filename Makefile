@@ -1,4 +1,7 @@
-vyos-modular:
+venv:
+	python3 -m venv venv
+
+vyos-modular: venv
 	git clone -b main --single-branch https://github.com/jack-broadway/vyos-modular
 	. venv/bin/activate && pip install -r vyos-modular/requirements.txt
 
