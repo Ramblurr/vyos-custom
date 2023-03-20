@@ -11,8 +11,9 @@ on:
       - dev
 
 jobs:
-  build:
+  build-only:
     runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
 
@@ -25,14 +26,7 @@ jobs:
       - name: Build
         run: make build
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: "./bin/**/*.iso"
-          if-no-files-found: error
-
-  release:
-    needs: [build]
+  build-and-release:
     runs-on: ubuntu-latest
     permissions:
       # Need permission to write to the Releases tab now.
@@ -40,22 +34,19 @@ jobs:
       contents: write
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: build-artifacts
-          path: "bin"
+      - uses: actions/checkout@v3
 
       - name: Read name
         uses: mikefarah/yq@master
         id: build_name
         with:
-          cmd: yq -i '.name' 'config.yml'
+          cmd: yq '.name' 'config.yml'
 
       - name: Read branch
         uses: mikefarah/yq@master
         id: build_branch
         with:
-          cmd: yq -i '.vyos_branch' 'config.yml'
+          cmd: yq '.vyos_branch' 'config.yml'
 
       - name: Setup variables
         id: vars
@@ -63,11 +54,23 @@ jobs:
           build_date=$(date +%Y%m%d%H%M)
           echo "tag-name=${{ steps.build_name.outputs.result }}-${build_date}" >> "$GITHUB_OUTPUT"
           echo "iso-name=vyos-${{ steps.build_name.outputs.result }}-${{ steps.build_branch.outputs.result }}-${build_date}-amd64.iso" >> "$GITHUB_OUTPUT"
+          echo "build-output=vyos-${{ steps.build_name.outputs.result }}-current-amd64.iso" >> "$GITHUB_OUTPUT"
 
+      - name: Debug
+        run: |
+          echo "${{ steps.vars.outputs.tag-name }}"
+          echo "${{ steps.vars.outputs.iso-name }}"
+          echo "${{ steps.vars.outputs.build-output }}"
+
+      - name: Build
+        run: make build
+
+      - name: Debug packages
+        run: find build/vyos-build/packages
 
       - name: Rename iso
         run: |
-          mv bin/vyos-${{ steps.build_name.outputs.result }}-current-amd64.iso bin/${{ steps.vars.outputs.iso-name }}
+          mv bin/${{ steps.vars.outputs.build-output }} bin/${{ steps.vars.outputs.iso-name }}
 
       - name: Create release with artifact
         uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e # v1

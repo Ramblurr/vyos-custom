@@ -2,3 +2,4 @@ venv
 vyos-modular
 build
 vendor
+.python-version
