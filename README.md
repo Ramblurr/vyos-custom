@@ -26,7 +26,7 @@ make build
 **Prereqs**:
 
 * docker (podman support not quite there yet)
-* python 3
+* python >= 3.10
 * rsync
 * git
 

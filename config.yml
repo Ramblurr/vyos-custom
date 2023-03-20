@@ -1,6 +1,6 @@
 ---
 name: rmblr
-vyos_branch: current
+vyos_branch: sagitta
 modules:
   - type: git
     url: https://github.com/jack-broadway/vyos-module-tailscale.git
