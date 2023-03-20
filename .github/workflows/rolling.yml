@@ -26,7 +26,7 @@ jobs:
       - name: Build
         run: make build
 
-  release:
+  build-and-release:
     runs-on: ubuntu-latest
     permissions:
       # Need permission to write to the Releases tab now.
@@ -40,13 +40,13 @@ jobs:
         uses: mikefarah/yq@master
         id: build_name
         with:
-          cmd: yq -i '.name' 'config.yml'
+          cmd: yq '.name' 'config.yml'
 
       - name: Read branch
         uses: mikefarah/yq@master
         id: build_branch
         with:
-          cmd: yq -i '.vyos_branch' 'config.yml'
+          cmd: yq '.vyos_branch' 'config.yml'
 
       - name: Setup variables
         id: vars
@@ -64,6 +64,9 @@ jobs:
 
       - name: Build
         run: make build
+
+      - name: Debug packages
+        run: find build/vyos-build/packages
 
       - name: Rename iso
         run: |
