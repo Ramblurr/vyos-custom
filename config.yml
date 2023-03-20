@@ -6,12 +6,9 @@ modules:
     url: https://github.com/jack-broadway/vyos-module-tailscale.git
     version: current
   - type: git
-    url: https://github.com/kylechase/vyos-module-speedtest.git
-    version: main
-  - type: git
     url: https://github.com/Ramblurr/vyos-module-gitops.git
-    version: main
+    version: saggita
   - type: git
     url: https://github.com/Ramblurr/vyos-module-mft.git
-    version: main
+    version: saggita
 ...
