@@ -17,6 +17,8 @@ jobs:
       # https://github.com/ncipollo/release-action/issues/208.
       contents: write
     steps:
+      - uses: actions/checkout@v3
+
       - name: Build
         run: make build
 
