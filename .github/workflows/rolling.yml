@@ -1,0 +1,32 @@
+---
+name: VyOS Modular - Rolling
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 3 * * *
+
+env:
+  BUILD_NAME: rmblr
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      # Need permission to write to the Releases tab now.
+      # https://github.com/ncipollo/release-action/issues/208.
+      contents: write
+    steps:
+      - name: Build
+        run: make build
+
+      - name: Create release with artifact
+        uses: ncipollo/release-action@a2e71bdd4e7dab70ca26a852f29600c98b33153e # v1
+        with:
+          token: "${{ steps.generate-token.outputs.token }}"
+          tag: "v${{ steps.vars.outputs.tag-name }}"
+          artifacts: "./build/vyos-build/build/vyos-${{ env.BUILD_NAME }}-current-amd64.iso"
+          artifactErrorsFailBuild: true
+          body: |
+            Official VyOS Changelog:
+            https://docs.vyos.io/en/latest/changelog/1.4.html
