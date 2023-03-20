@@ -1,8 +1,11 @@
+VYOS_MODULAR_USER ?= ramblurr
+VYOS_MODULAR_BRANCH ?= dev
+
 venv:
 	python3 -m venv venv
 
 vyos-modular: venv
-	git clone -b main --single-branch https://github.com/jack-broadway/vyos-modular
+	git clone -b ${VYOS_MODULAR_BRANCH} --single-branch "https://github.com/${VYOS_MODULAR_USER}/vyos-modular"
 	. venv/bin/activate && pip install -r vyos-modular/requirements.txt
 
 .PHONY: build
@@ -11,4 +14,4 @@ build: vyos-modular
 
 .PHONY: clean
 clean:
-	sudo rm -rf vyos-modular build/ vendor/
+	sudo rm -rf vyos-modular build/ vendor/ bin/
