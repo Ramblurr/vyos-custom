@@ -1,6 +1,6 @@
 # vyos-custom
 
-This is my custom build of rolling [VyOS](https://vyos.io/), built using
+This is my custom build of rolling [VyOS](https://vyos.io/) 1.4 (saggita), built using
 [vyos-modular](https://github.com/jack-broadway/vyos-modular) (actually my
 [fork](https://github.com/Ramblurr/vyos-modular) of it for now until I upstream
 the changes).
@@ -9,7 +9,6 @@ the changes).
 | Module                  | Link                                                   |
 |-------------------------|--------------------------------------------------------|
 | tailscale               | https://github.com/jack-broadway/vyos-module-tailscale |
-| speedtest               | https://github.com/kylechase/vyos-module-speedtest     |
 | mellanox firmware tools | https://github.com/Ramblurr/vyos-module-mft            |
 | (somewhat) gitops       | https://github.com/Ramblurr/vyos-module-gitops         |
 
@@ -25,7 +24,7 @@ make build
 
 **Prereqs**:
 
-* docker (podman support not quite there yet)
+* docker
 * python >= 3.10
 * rsync
 * git
@@ -33,4 +32,4 @@ make build
 
 ## Want your own?
 
-Copy this repo, supply your own config.
+Copy this repo, supply your own [config.yml](./config.yml).
